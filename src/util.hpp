@@ -21,6 +21,7 @@
 
 using namespace std;
 using namespace ant;
+template<typename T> using Grid = grid::Grid<T>;
 using namespace ant::geometry::d2::f;
 using namespace ant::opt::tsp;
 using Segment = ant::geometry::d2::i::Segment;
@@ -28,12 +29,17 @@ using namespace ant::geometry::d2;
 using namespace ant::linalg;
 
 
-using AdjacentEdges = vector<pair<City, City>>;
 using Polygons = vector<vector<City>>;
 using Intersections = vector<pair<TSP::Edge, TSP::Edge>>;
-using Tour = std::vector<City>;
-using Edge = TSP::Edge;
 using Seed = std::default_random_engine::result_type;
+
+
+
+void MakeEachTourFeasible(AdjacentEdges& edges, vector<City> tour_begin);
+
+
+
+
 
 
 struct MakeTourFeasibleError : runtime_error {

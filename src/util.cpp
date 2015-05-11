@@ -3,6 +3,49 @@
 
 
 
+// get factor of 2 for going through everything multiple times sometimes
+void MakeTourFeasible(const vector<i::Point>& points,
+                      const Grid<City>& closest_cities, 
+                      const vector<City>& city_group,
+                      AdjacentEdges& tours, 
+                      City tour_start
+                      ) {
+    auto& ts = tours;
+    auto& ps = points;
+    City cur = tour_start;
+    while (cur != tour_start) { 
+        start:
+        City next = ts.Next(cur);
+        Edge e = {{cur, next}};
+        Index cur_group = city_group[cur];
+        for (auto e_c : e) {
+            for (auto j = 0; j < closest_cities.col_count(); ++j) {
+                auto k = closest_cities(e_c, j);
+                if (city_group[k] != cur_group) {
+                    continue;
+                }
+                for (const Edge& e_2 : {Edge{{ts.Prev(k), k}}, Edge{{k, ts.Next(k)}}}) {
+                    if (!Segment{ps[e[0]], ps[e[1]]}.IntersectOrLie(
+                            Segment{ps[e_2[0]], ps[e_2[1]]})
+                        || e[0] == e_2[0] || e[0] == e_2[1] ||
+                           e[1] == e_2[0] || e[1] == e_2[1]) {
+                    
+                        continue;
+                    }
+                    // got intersection
+                    ts.FlipInTour(e, e_2);
+                    // don't know will it help 
+                    tour_start = cur;
+                    goto start;
+                }
+            }
+        }
+        cur = next;
+    }
+}
+
+
+
 bool ValidityCheck(const vector<int>& s) {
     // feasibility check
     vector<bool> visited(s.size(), false);
@@ -366,6 +409,7 @@ bool MakeTourFeasible(const vector<i::Point>& points,
             auto k_0 = e_0[1];
             auto c_1 = e_1[0];
             auto k_1 = e_1[1];
+            // maybe don't give a fuck about that
             if (!valid_edge(c_0, k_0) || !valid_edge(c_1, k_1)) {
                 return false;
             }
