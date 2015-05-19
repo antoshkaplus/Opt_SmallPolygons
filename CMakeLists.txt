@@ -20,10 +20,10 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LibDir} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
-file(GLOB SOURCE_FILES "./src/main.cpp")
-file(GLOB HEADER_FILES "./include/*.h")
+file(GLOB SOURCE_FILES "./src/*.cpp")
+file(GLOB HEADER_FILES "./include/*.hpp")
 
-file(GLOB SUBMIT_FILES "./src/version.cpp")
+file(GLOB SUBMIT_FILES "./submit/version.cpp")
 
 include_directories("./include")
 include_directories("/usr/local/include")
@@ -34,7 +34,15 @@ if (NOT ANT_LIBRARY)
     message(FATAL_ERROR "ant library not found")    
 endif()
 
+find_library(CGAL_LIBRARY cgal)
+if (NOT CGAL_LIBRARY) 
+    message(FATAL_ERROR "cgal library not found")
+endif()
+
 add_executable(small_polygons ${SOURCE_FILES} ${HEADER_FILES})
-target_link_libraries(small_polygons ${ANT_LIBRARY})
+target_link_libraries(small_polygons 
+    ${ANT_LIBRARY}
+    ${CGAL_LIBRARY}
+    )
 
 add_library(submit STATIC ${SUBMIT_FILES})

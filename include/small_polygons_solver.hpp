@@ -3,7 +3,7 @@
 #define SMALL_POLYGONS_SOLVER
 
 
-#include "ant/core.h"
+#include "ant/core/core.hpp"
 #include "simplex_insertion.hpp"
 
 

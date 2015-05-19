@@ -79,28 +79,14 @@ void ValidityCheck(const AdjacentEdges& adj_edgs,
             int c_prev = t[(k+t.size()-1)%t.size()];
             int c_next = t[(k+1)%t.size()];
             auto& a = adj_edgs[c];
-            assert((a.first == c_prev && a.second == c_next) || 
-                   (a.first == c_next && a.second == c_prev));
+            assert((a[0] == c_prev && a[1] == c_next) || 
+                   (a[0] == c_next && a[1] == c_prev));
         }
     }
     for (int i = 0; i < city_count; ++i) {
         assert(visited[i]);
     }              
 }
-
-
-AdjacentEdges ConstructAdjacentEdges(const Polygons& ss, Count city_count) {
-    AdjacentEdges res(city_count);
-    for (auto& s : ss) {
-        for (int i = 0; i < s.size(); ++i) {
-            int prev = (i + s.size() -1) % s.size();
-            int next = (i+1) % s.size();
-            res[s[i]] = Edge{{s[prev], s[next]}};
-        }
-    }
-    return res;
-}
-
 
 vector<Index> ConstructCityGroups(const Polygons& ss, Count city_count) {
     vector<Index> r(city_count);
@@ -144,14 +130,14 @@ Intersections FindIntersectionsForTour(const vector<i::Point>& ps,
             for (int j = 0; j < near.col_count(); ++j) {
                 int f = near(e_c, j);
                 if (!visited[f]) continue;
-                for (auto r : {adj[f].first, adj[f].second}) {
+                for (auto r : {adj[f][0], adj[f][1]}) {
                     Edge e_2{f, r};
                     if (e_2[0] > e_2[1]) swap(e_2[0], e_2[1]);
                     
                     if (e[0] == e_2[0] || e[0] == e_2[1] ||
                         e[1] == e_2[0] || e[1] == e_2[1] ||
-                        !Segment{ps[e[0]], ps[e[1]]}.IntersectOrLie(
-                            Segment{ps[e_2[0]], ps[e_2[1]]})) {
+                        !i::Segment{ps[e[0]], ps[e[1]]}.IntersectOrLie(
+                            i::Segment{ps[e_2[0]], ps[e_2[1]]})) {
                             
                             continue;
                         }
@@ -194,13 +180,13 @@ Intersections FindIntersectionsBetweenTours(
                     if (!visited[f] || city_corresp[e_c] == city_corresp[f]) {
                         continue;
                     }
-                    for (auto r : {adj[f].first, adj[f].second}) {
+                    for (auto r : {adj[f][0], adj[f][1]}) {
                         
                         Edge e_2{f, r};
                         if (e_2[0] > e_2[1]) swap(e_2[0], e_2[1]);
                         
-                        if (!Segment{ps[e[0]], ps[e[1]]}.IntersectOrLie(
-                                    Segment{ps[e_2[0]], ps[e_2[1]]})) {
+                        if (!i::Segment{ps[e[0]], ps[e[1]]}.IntersectOrLie(
+                                    i::Segment{ps[e_2[0]], ps[e_2[1]]})) {
                             continue;
                         }
                         merge(e.begin(), e.end(), e_2.begin(), e_2.end(), ee.begin());
