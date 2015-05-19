@@ -25,8 +25,8 @@ void MakeTourFeasible(const vector<i::Point>& points,
                     continue;
                 }
                 for (const Edge& e_2 : {Edge{{ts.Prev(k), k}}, Edge{{k, ts.Next(k)}}}) {
-                    if (!Segment{ps[e[0]], ps[e[1]]}.IntersectOrLie(
-                            Segment{ps[e_2[0]], ps[e_2[1]]})
+                    if (!i::Segment{ps[e[0]], ps[e[1]]}.IntersectOrLie(
+                            i::Segment{ps[e_2[0]], ps[e_2[1]]})
                         || e[0] == e_2[0] || e[0] == e_2[1] ||
                            e[1] == e_2[0] || e[1] == e_2[1]) {
                     
@@ -95,7 +95,7 @@ AdjacentEdges ConstructAdjacentEdges(const Polygons& ss, Count city_count) {
         for (int i = 0; i < s.size(); ++i) {
             int prev = (i + s.size() -1) % s.size();
             int next = (i+1) % s.size();
-            res[s[i]] = {s[prev], s[next]};
+            res[s[i]] = Edge{{s[prev], s[next]}};
         }
     }
     return res;
