@@ -10,7 +10,7 @@
 #include <unordered_set>
 #include <queue>
 
-#include "ant/core.h"
+#include "ant/core/core.hpp"
 #include "ant/geometry/d2.h"
 #include "ant/optimization/tsp/tsp.hpp"
 #include "ant/optimization/tsp/tsp_ant_colony.hpp"
@@ -217,6 +217,15 @@ void Improve(const grid::Grid<City>& closest_cities,
 
 
 
+
+
+
+
+#include <CGAL/Cartesian.h>
+#include <CGAL/MP_Float.h>
+#include <CGAL/Quotient.h>
+#include <CGAL/Arr_segment_traits_2.h>
+#include <CGAL/Sweep_line_2_algorithms.h>
 
 
 
