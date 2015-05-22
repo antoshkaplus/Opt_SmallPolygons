@@ -70,7 +70,7 @@ protected:
     void InitializeWithStartingTours() {
         auto& ts = *tours; 
         for (City c = 0; c < city_count; ++c) {
-            if (ts.Visited(c)) continue;
+            if (!ts.Visited(c)) continue;
             UpdateQueue(c);
         }
     }

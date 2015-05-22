@@ -34,8 +34,12 @@ private:
         auto starting_tours = ::GenerateStartingTours(closest_cities, excluded_starting_tours, max_tour_count, seed);
         auto adj_edges = ConstructAdjacentEdges(starting_tours, city_count);
         auto city_groups = ConstructCityGroups(starting_tours, city_count);
+        AdjacentEdges starting_tours_2(city_count);
+        for (auto& t : starting_tours) {
+            starting_tours_2.AddTour(t);
+        }
         auto inters = FindIntersectionsBetweenTours(points_int, closest_cities, 
-                                                    city_groups, starting_tours, adj_edges);
+                                                    city_groups, starting_tours, starting_tours_2);
         if (!inters.empty()) {
             throw logic_error("starting tours have intersections");
         }
@@ -87,11 +91,13 @@ public:
             for (auto& s : starting_tours) {
                 sort(s.begin(), s.end());
             }
+            AdjacentEdges adj(10);
             if (starting_tours.empty()) throw logic_error("starting tours are empty");
             // created initial solution probably infeasible
-            vector<Tour> sol_tours = simplex_insertion->Solve(
-                                                points_int, closest_cities, 
-                                                edge_distance, starting_tours);
+            vector<Tour> sol_tours; 
+            simplex_insertion->Solve(
+                            points_int, closest_cities, 
+                            edge_distance, adj);
             ++iter;
             auto adj_edges = ConstructAdjacentEdges(sol_tours, city_count);
             

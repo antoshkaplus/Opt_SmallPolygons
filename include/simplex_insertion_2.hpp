@@ -6,6 +6,7 @@
 #include "simplex_insertion.hpp"
 
 
+// trying to add some weights or something to get better result for current solution 
 struct SimplexInsertion_2 : SimplexInsertion {
     
     double Area(City c_0, City c_1, City c_2) {

@@ -11,35 +11,35 @@
 #include "small_polygons.hpp"
 #include "simplex_insertion.hpp"
 #include "ant/optimization/optimization.h"
-
-struct Test {
-    vector<int> ps;
-    int n;
-    
-    Test() {}
-    Test(vector<int> ps, int n) : ps(ps), n(n) {}
-};
-
-uniform_int_distribution<> POINTS_DISTRIBUTION(0, 699);
-default_random_engine RNG;
-
-vector<i::Point> GenerateTest(int point_count) {
-    vector<i::Point> res(point_count);
-    unordered_set<int> ps;
-    for (auto& p : res) {
-        while (true) {
-            p.set(POINTS_DISTRIBUTION(RNG), POINTS_DISTRIBUTION(RNG));
-            int key = p.x * POINTS_DISTRIBUTION.max() + p.y;
-            if (ps.find(key) == ps.end()) {
-                ps.insert(key);
-                break;
-            }
-        }
-    }
-    return res;
-}
-
-Test GenerateTest() {
+//
+//struct Test {
+//    vector<int> ps;
+//    int n;
+//    
+//    Test() {}
+//    Test(vector<int> ps, int n) : ps(ps), n(n) {}
+//};
+//
+//uniform_int_distribution<> POINTS_DISTRIBUTION(0, 699);
+//default_random_engine RNG;
+//
+//vector<i::Point> GenerateTest(int point_count) {
+//    vector<i::Point> res(point_count);
+//    unordered_set<int> ps;
+//    for (auto& p : res) {
+//        while (true) {
+//            p.set(POINTS_DISTRIBUTION(RNG), POINTS_DISTRIBUTION(RNG));
+//            int key = p.x * POINTS_DISTRIBUTION.max() + p.y;
+//            if (ps.find(key) == ps.end()) {
+//                ps.insert(key);
+//                break;
+//            }
+//        }
+//    }
+//    return res;
+//}
+//
+Sample GenerateSample() {
     uniform_int_distribution<> distr(20, 1500);
     default_random_engine rng;
     int Np = 3000;// 2*distr(rng);
@@ -97,8 +97,8 @@ void TestRange(const pair<Count, Count>& range, Count count, double param_profit
     sol.set_simplex_insertion(si);
     sol.set_time_millis(test_time);
     for (int i = 0; i < count; ++i) {
-        Test t{
-            to_vector_int(GenerateTest(distr(rng))), 
+        Sample t{
+            to_vector_int(GenerateSample(distr(rng))), 
             distr_poly(rng)
         };
         sol.choosePolygons(t.ps, t.n);
@@ -118,10 +118,10 @@ void FindParamArea(unsigned test_time) {
         uniform_int_distribution<> distr(g.first, g.second);
         default_random_engine rng;
         
-        vector<Test> ts;
+        vector<Sample> ts;
         for (int i = 0; i < test_count; ++i) {
             ts.emplace_back(
-                            to_vector_int(GenerateTest(distr(rng))),
+                            to_vector_int(GenerateSample(distr(rng))),
                             distr_poly(rng)); 
         }
         
@@ -157,10 +157,10 @@ void FindParamExcludeEdge(unsigned test_time) {
         uniform_int_distribution<> distr(g.first, g.second);
         default_random_engine rng;
         
-        vector<Test> ts;
+        vector<Sample> ts;
         for (int i = 0; i < test_count; ++i) {
             ts.emplace_back(
-                to_vector_int(GenerateTest(distr(rng))),
+                to_vector_int(GenerateSample(distr(rng))),
                 distr_poly(rng)); 
         }
         
@@ -191,7 +191,7 @@ void TestShouldImprove() {
     Count improve_better = 0;
     Count equal = 0;
     for (int i = 0; i < 100; ++i) {
-        auto v = to_vector_int(GenerateTest(distr(rng)));
+        auto v = to_vector_int(GenerateSample(distr(rng)));
         auto N = distr_poly(rng);
         sm.set_should_improve(true);
         sm.choosePolygons(v, N);

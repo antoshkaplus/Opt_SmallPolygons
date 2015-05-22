@@ -14,10 +14,12 @@ set(LibDir "../lib")
 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BinDir} )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LibDir} )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LibDir} )
 foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
     set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BinDir} )
     set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LibDir} )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LibDir} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 file(GLOB SOURCE_FILES "./src/*.cpp")
@@ -34,15 +36,14 @@ if (NOT ANT_LIBRARY)
     message(FATAL_ERROR "ant library not found")    
 endif()
 
-find_library(CGAL_LIBRARY cgal)
-if (NOT CGAL_LIBRARY) 
-    message(FATAL_ERROR "cgal library not found")
-endif()
+add_library(small_polygons ${SOURCE_FILES} ${HEADER_FILES})
+target_link_libraries(small_polygons ${ANT_LIBRARY})
+    
+add_executable(solver "./app/solver.cpp")
+target_link_libraries(solver small_polygons)
 
-add_executable(small_polygons ${SOURCE_FILES} ${HEADER_FILES})
-target_link_libraries(small_polygons 
-    ${ANT_LIBRARY}
-    ${CGAL_LIBRARY}
-    )
+add_executable(test "./app/test.cpp")
+target_link_libraries(test small_polygons ${ANT_LIBRARY})
 
 add_library(submit STATIC ${SUBMIT_FILES})
+

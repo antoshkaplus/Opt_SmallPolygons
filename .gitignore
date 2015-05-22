@@ -1,3 +1,6 @@
 
+# should be created by the user who works on the project
+output
 bin
+lib
 build*

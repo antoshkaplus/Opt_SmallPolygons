@@ -89,6 +89,10 @@ Intersections FindIntersectionsBetweenTours(
                                             const vector<Tour>& tours,
                                             const AdjacentEdges& adj);
 
+Intersections FindIntersections(const vector<i::Point>& ps, 
+                       const grid::Grid<int>& near,
+                       const AdjacentEdges& adj);
+
 
 grid::Grid<City> ComputeClosestCities(const grid::Grid<double>& ds, 
                                       Count closest_count);
@@ -96,8 +100,7 @@ grid::Grid<City> ComputeClosestCities(const grid::Grid<double>& ds,
 vector<Tour> GenerateStartingTours(const grid::Grid<City>& closest_cities, 
                                    const unordered_set<uint64_t>& excluded_starting_tours,
                                    Count max_tour_count, 
-                                   Seed seed);
-                                   
+                                   Seed seed);                                   
 
 // this one should be usuful when not that many points (not that many possible polygon)
 template<class Distance>
@@ -170,13 +173,13 @@ vector<bool> ComputeVisitedCities(const vector<Tour>& tours, Count city_count);
 
 void SwitchEdgesInTour(Tour& tour, Edge& e_0, Edge& e_1, AdjacentEdges& adj_edges);
 
-bool MakeTourFeasible(const vector<i::Point>& points,
-                      const grid::Grid<City>& closest_cities,
-                      const grid::Grid<char>& valid_edge,
-                      AdjacentEdges& adj_edges,
-                      unordered_set<uint64_t>& excluded_tours,
-                      Tour& tour,
-                      Count max_iteration_count);
+//bool MakeTourFeasible(const vector<i::Point>& points,
+//                      const grid::Grid<City>& closest_cities,
+//                      const grid::Grid<char>& valid_edge,
+//                      AdjacentEdges& adj_edges,
+//                      unordered_set<uint64_t>& excluded_tours,
+//                      Tour& tour,
+//                      Count max_iteration_count);
                       
 
 grid::Grid<double> ComputeEdgeDistance(const vector<Point>& ps);                      
@@ -196,9 +199,9 @@ bool ResolveIntersectionsBetweenTwoTours(const vector<i::Point>& ps,
 bool EdgeEqual(const Edge& e_0, const Edge& e_1);
 Index EdgeCommonCity(const Edge& e_0, const Edge& e_1);
 
-void ReplaceCity_2(AdjacentEdges& adj_edges, Tour& a, City c_a, Tour& b, City c_b);
-// need to update those
-void ReplaceCity(AdjacentEdges& adj_edges, Tour& source, Tour& target, City what, Edge where);
+//void ReplaceCity_2(AdjacentEdges& adj_edges, Tour& a, City c_a, Tour& b, City c_b);
+//// need to update those
+//void ReplaceCity(AdjacentEdges& adj_edges, Tour& source, Tour& target, City what, Edge where);
 
 bool MakeSolutionValid(const vector<i::Point>& points_int, 
                        const grid::Grid<City>& closest_cities, 
@@ -215,20 +218,18 @@ void Improve(const grid::Grid<City>& closest_cities,
              Count closest_count);
 
 
+struct Sample {
+    vector<int> ps;
+    int n;
+    
+    Sample() {}
+    Sample(vector<int> ps, int n) : ps(ps), n(n) {}
+};
 
+extern uniform_int_distribution<> POINTS_DISTRIBUTION;
+extern default_random_engine RNG;
 
-
-
-
-
-#include <CGAL/Cartesian.h>
-#include <CGAL/MP_Float.h>
-#include <CGAL/Quotient.h>
-#include <CGAL/Arr_segment_traits_2.h>
-#include <CGAL/Sweep_line_2_algorithms.h>
-
-
-
+vector<i::Point> GenerateSample(int point_count);
 
 
 #endif
