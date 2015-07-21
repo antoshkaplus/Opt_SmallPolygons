@@ -10,7 +10,10 @@
 #include "small_polygons_solver.hpp"
 #include "small_polygons.hpp"
 #include "simplex_insertion.hpp"
+#include "triangulation.hpp"
 #include "ant/optimization/optimization.h"
+
+
 //
 //struct Test {
 //    vector<int> ps;
