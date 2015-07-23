@@ -11,7 +11,7 @@
 #include <queue>
 
 #include "ant/core/core.hpp"
-#include "ant/geometry/d2.h"
+#include "ant/geometry/d2.hpp"
 #include "ant/optimization/tsp/tsp.hpp"
 #include "ant/optimization/tsp/tsp_ant_colony.hpp"
 #include "ant/optimization/tsp/tsp_random_insertion.hpp"
@@ -138,13 +138,13 @@ vector<Tour> GenerateStartingTours(const vector<i::Point>& ps,
             bool b = visited[k_3];
             if (b) continue;
             if (b_1) {
-                PointInsideTriangle<i::Point> tr(ps[k_0], ps[k_3], ps[k_2]);
+                PointTriangle<i::Point> tr(ps[k_0], ps[k_3], ps[k_2]);
                 if (tr.IsInside(ps[k_1])) { //|| area < HeronFormula(ds(k_0, k_3), ds(k_3, k_2), ds(k_2, k_0))) 
                     continue;
                 }
                 k_1 = k_3;
             } else { // b_2 visited
-                PointInsideTriangle<i::Point> tr(ps[k_0], ps[k_3], ps[k_1]);
+                PointTriangle<i::Point> tr(ps[k_0], ps[k_3], ps[k_1]);
                 if (tr.IsInside(ps[k_2])) { //|| area < HeronFormula(ds(k_0, k_1), ds(k_1, k_3), ds(k_3, k_0))) 
                     continue;
                 }

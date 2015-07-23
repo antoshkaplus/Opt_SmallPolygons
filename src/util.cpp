@@ -337,7 +337,7 @@ grid::Grid<double> ComputeEdgeDistance(const vector<Point>& ps) {
     grid::Grid<double> h(city_count, city_count);
     for (int r = 0; r < city_count; ++r) {
         for (int c = 0; c < city_count; ++c) {
-            h(r, c) = h(c, r) = ps[r].distance(ps[c]);
+            h(r, c) = h(c, r) = ps[r].Distance(ps[c]);
         }
     }
     return h;

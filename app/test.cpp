@@ -9,7 +9,7 @@
 #include "ant/geometry/bentley_ottmann.hpp"
 #include "ant/core/core.hpp"
 #include "simplex_insertion.hpp"
-
+#include "triangulation.hpp"
 
 using namespace std;
 using namespace ant;
@@ -20,10 +20,18 @@ using namespace d2;
 int main(int argc, const char * argv[]) {
     int N = 1500;
     auto sample_i = GenerateSample(N);
+    
+    
+    Triangulation tr;
+    tr.Solve(sample_i, 10);
+    
+    
+    
     vector<f::Point> sample_f(N);
     transform(sample_i.begin(), sample_i.end(), sample_f.begin(), [](const i::Point& p) {
         return f::Point(p.x, p.y);
     });
+    
     SimplexInsertion si;
     auto edge_distances = ComputeEdgeDistance(sample_f);
     auto closest_cities = ComputeClosestCities(edge_distances, 30);
@@ -48,6 +56,9 @@ int main(int argc, const char * argv[]) {
     };
     
     
+    
+    
+    
     // finding intersecctions with bentley ottmann
     auto t = GetMillisCount();
     BentleyOttmann<f::Point, decltype(func)> finder_1;
@@ -60,8 +71,6 @@ int main(int argc, const char * argv[]) {
     FindIntersections(sample_i, closest_cities, tours);
     d = GetMillisCount() - t;
     cout << "NearBruteForce: " << d << endl;
-    
-    
     
     
     
